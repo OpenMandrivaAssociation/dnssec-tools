@@ -25,6 +25,7 @@ BuildRequires:	openssl-devel
 BuildRequires:	autoconf2.5
 BuildRequires:	libtool
 BuildRequires:	chrpath
+BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root
 
 %description
 The goal of the DNSSEC-Tools project is to create a set of tools, patches,
