@@ -84,7 +84,7 @@ popd
 %configure2_5x \
     --with-validator-testcases-file=%{_datadir}/%{name}/validator-testcases \
     --with-perl-build-args="INSTALLDIRS=vendor" \
-    --with-root-hints=%{_localstatedir}/named/var/named/named.ca \
+    --with-root-hints=%{_localstatedir}/lib/named/var/named/named.ca \
     --with-resolv-conf=%{_sysconfdir}/resolv.conf \
     --with-nsec3 \
     --with-dlv \
@@ -104,7 +104,7 @@ rm -rf %{buildroot}
 
 install -d %{buildroot}%{_sysconfdir}/logrotate.d
 install -d %{buildroot}/var/log/%{name}
-install -d %{buildroot}%{_localstatedir}/%{name}/KEY-SAFE
+install -d %{buildroot}%{_localstatedir}/lib/%{name}/KEY-SAFE
 
 install -m0644 %{SOURCE1} %{buildroot}%{_sysconfdir}/%{name}/dnsval.conf
 install -m0644 tools/etc/%{name}/blinkenlights.conf %{buildroot}%{_sysconfdir}/%{name}/blinkenlights.conf
@@ -180,8 +180,8 @@ rm -rf %{buildroot}
 %dir %{_datadir}/%{name}/donuts/rules
 %{_datadir}/%{name}/donuts/rules/*
 %{_datadir}/%{name}/validator-testcases
-%dir %{_localstatedir}/%{name}
-%dir %{_localstatedir}/%{name}/KEY-SAFE
+%dir %{_localstatedir}/lib/%{name}
+%dir %{_localstatedir}/lib/%{name}/KEY-SAFE
 %dir /var/log/%{name}
 %{_mandir}/man1/dnspktflow.1*
 %{_mandir}/man1/donuts.1*
