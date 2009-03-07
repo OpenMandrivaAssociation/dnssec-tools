@@ -4,7 +4,7 @@
 
 Summary:	A suite of tools for managing dnssec aware DNS usage
 Name:		dnssec-tools
-Version:	1.4.1
+Version:	1.5
 Release:	%mkrel 1
 License:	BSD-like
 Group:		Networking/Other
@@ -14,6 +14,7 @@ Source1:	dnssec-tools-dnsval.conf
 Patch0:		dnssec-tools-linux-conf-paths-1.2.patch
 Patch2:		dnssec-tools-DESTDIR.diff
 Patch3:		dnssec-tools-linkage_fix.diff
+Patch4:		dnssec-tools-1.5-format_not_a_string_literal_and_no_format_arguments.diff
 Requires:	bind
 Requires:	perl-Net-DNS
 Requires:	perl-%{name} >= %{version}
@@ -67,6 +68,7 @@ C-based libraries useful for developing dnssec aware tools.
 %patch0 -p0
 %patch2 -p0
 %patch3 -p0
+%patch4 -p1
 
 # clean up CVS stuff
 for i in `find . -type d -name CVS` `find . -type f -name .cvs\*` `find . -type f -name .#\*`; do
@@ -165,6 +167,7 @@ rm -rf %{buildroot}
 %{_bindir}/genkrf
 %{_bindir}/getaddr
 %{_bindir}/getdnskeys
+%{_bindir}/getds
 %{_bindir}/gethost
 %{_bindir}/getname
 %{_bindir}/getquery
@@ -172,6 +175,7 @@ rm -rf %{buildroot}
 %{_bindir}/keyarch
 %{_bindir}/krfcheck
 %{_bindir}/libval_check_conf
+%{_bindir}/lsdnssec
 %{_bindir}/lskrf
 %{_bindir}/lsroll
 %{_bindir}/maketestzone
@@ -189,6 +193,7 @@ rm -rf %{buildroot}
 %{_bindir}/trustman
 %{_bindir}/validate
 %{_bindir}/zonesigner
+
 %dir %{_datadir}/%{name}
 %dir %{_datadir}/%{name}/donuts
 %dir %{_datadir}/%{name}/donuts/rules
@@ -215,6 +220,7 @@ rm -rf %{buildroot}
 %{_mandir}/man1/genkrf.1*
 %{_mandir}/man1/getaddr.1*
 %{_mandir}/man1/getdnskeys.1*
+%{_mandir}/man1/getds.1*
 %{_mandir}/man1/gethost.1*
 %{_mandir}/man1/getname.1.*
 %{_mandir}/man1/getquery.1.*
@@ -222,6 +228,7 @@ rm -rf %{buildroot}
 %{_mandir}/man1/keyarch.1*
 %{_mandir}/man1/krfcheck.1*
 %{_mandir}/man1/libval_check_conf.1.*
+%{_mandir}/man1/lsdnssec.1*
 %{_mandir}/man1/lskrf.1*
 %{_mandir}/man1/lsroll.1*
 %{_mandir}/man1/maketestzone.1*
@@ -312,3 +319,4 @@ rm -rf %{buildroot}
 %{_mandir}/man3/val_resolve_and_check.3*
 %{_mandir}/man3/val_res_query.3*
 %{_mandir}/man3/val_res_search.3*
+
