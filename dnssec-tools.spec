@@ -5,7 +5,7 @@
 Summary:	A suite of tools for managing dnssec aware DNS usage
 Name:		dnssec-tools
 Version:	1.5
-Release:	%mkrel 3
+Release:	%mkrel 4
 License:	BSD-like
 Group:		Networking/Other
 URL:		http://www.dnssec-tools.org/
