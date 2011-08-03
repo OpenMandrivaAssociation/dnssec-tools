@@ -4,12 +4,12 @@
 
 Summary:	A suite of tools for managing dnssec aware DNS usage
 Name:		dnssec-tools
-Version:	1.5
-Release:	%mkrel 4
+Version:	1.10
+Release:	%mkrel 1
 License:	BSD-like
 Group:		Networking/Other
 URL:		http://www.dnssec-tools.org/
-Source0:	http://downloads.sourceforge.net/sourceforge/%{name}/%{name}-%{version}.tar.gz
+Source0:	http://www.dnssec-tools.org/download/dnssec-tools-%{version}.tar.gz
 Source1:	dnssec-tools-dnsval.conf
 Patch0:		dnssec-tools-linux-conf-paths-1.2.patch
 Patch2:		dnssec-tools-DESTDIR.diff
@@ -68,7 +68,7 @@ C-based libraries useful for developing dnssec aware tools.
 %patch0 -p0
 %patch2 -p0
 %patch3 -p0
-%patch4 -p1
+%patch4 -p0
 
 # clean up CVS stuff
 for i in `find . -type d -name CVS` `find . -type f -name .cvs\*` `find . -type f -name .#\*`; do
