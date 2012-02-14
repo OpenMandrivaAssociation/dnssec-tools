@@ -77,6 +77,7 @@ for i in `find . -type d -name CVS` `find . -type f -name .cvs\*` `find . -type 
 done
 
 %build
+export PATH=$PATH:%{_sbindir}
 export WANT_AUTOCONF_2_5=1
 rm -f configure
 libtoolize --copy --force; aclocal; autoconf --force
