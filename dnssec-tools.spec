@@ -27,6 +27,7 @@ BuildRequires:	openssl-devel
 BuildRequires:	autoconf2.5
 BuildRequires:	libtool
 BuildRequires:	chrpath
+BuildRequires:	bind
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-buildroot
 
 %description
