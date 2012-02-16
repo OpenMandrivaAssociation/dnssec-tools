@@ -116,7 +116,7 @@ cat > %{buildroot}%{_sysconfdir}/logrotate.d/%{name} << EOF
 EOF
 
 %files
-%doc COPYING ChangeLog INSTALL NEWS README tools/demos tools/linux/ifup-dyn-dns tools/logwatch
+%doc COPYING ChangeLog NEWS README tools/demos tools/linux/ifup-dyn-dns tools/logwatch
 %attr(0644,root,root) %config(noreplace) %{_sysconfdir}/%{name}/%{name}.conf
 %attr(0644,root,root) %config(noreplace) %{_sysconfdir}/%{name}/dnsval.conf
 %attr(0644,root,root) %config(noreplace) %{_sysconfdir}/%{name}/blinkenlights.conf
