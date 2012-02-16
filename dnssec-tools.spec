@@ -71,7 +71,7 @@ C-based libraries useful for developing dnssec aware tools.
 %patch3 -p0
 %patch4 -p1 -b .install~
 
-find -name \*.orig|xargs rm -f
+find -name \*.orig -o -name .gitignore|xargs rm -f
 
 autoreconf -fi
 pushd validator
