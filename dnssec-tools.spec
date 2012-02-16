@@ -11,7 +11,6 @@ Group:		Networking/Other
 URL:		http://www.dnssec-tools.org/
 Source0:	http://www.dnssec-tools.org/download/dnssec-tools-%{version}.tar.gz
 Source1:	dnssec-tools-dnsval.conf
-Patch0:		dnssec-tools-linux-conf-paths-1.2.patch
 Patch2:		dnssec-tools-DESTDIR.diff
 Patch3:		dnssec-tools-linkage_fix.diff
 Patch4:		dnssec-tools-1.12.1-validator-header-install-fix.patch
@@ -61,9 +60,7 @@ Obsoletes:	%{mklibname dnssec-tools -d 4}
 C-based libraries useful for developing dnssec aware tools.
 
 %prep
-
 %setup -q
-#patch0 -p0
 %patch2 -p0
 %patch3 -p0
 %patch4 -p1 -b .install~
