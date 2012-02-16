@@ -69,6 +69,11 @@ C-based libraries useful for developing dnssec aware tools.
 %patch2 -p0
 %patch3 -p0
 
+autoreconf -fi
+pushd validator
+autoreconf -fi
+popd
+
 # clean up CVS stuff
 for i in `find . -type d -name CVS` `find . -type f -name .cvs\*` `find . -type f -name .#\*`; do
     if [ -e "$i" ]; then rm -r $i; fi >&/dev/null
@@ -76,16 +81,6 @@ done
 
 %build
 export PATH=$PATH:%{_sbindir}
-export WANT_AUTOCONF_2_5=1
-rm -f configure
-libtoolize --copy --force; aclocal; autoconf --force
-
-pushd validator
-rm -f configure
-libtoolize --copy --force; aclocal; autoconf --force
-popd
-
-export LIBS="-lssl"
 
 %configure2_5x \
     --with-validator-testcases-file=%{_datadir}/%{name}/validator-testcases \
