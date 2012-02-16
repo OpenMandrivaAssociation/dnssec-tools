@@ -148,8 +148,10 @@ rm -rf %{buildroot}
 %attr(0644,root,root) %config(noreplace) %{_sysconfdir}/%{name}/blinkenlights.conf
 %attr(0644,root,root) %config(noreplace) %{_sysconfdir}/logrotate.d/%{name}
 %{_bindir}/blinkenlights
+%{_bindir}/bubbles
 %{_bindir}/cleanarch
 %{_bindir}/cleankrf
+%{_bindir}/convertar
 %{_bindir}/dnspktflow
 %{_bindir}/donuts
 %{_bindir}/donutsd
@@ -172,6 +174,7 @@ rm -rf %{buildroot}
 %{_bindir}/keyarch
 %{_bindir}/krfcheck
 %{_bindir}/libval_check_conf
+%{_bindir}/lights
 %{_bindir}/lsdnssec
 %{_bindir}/lskrf
 %{_bindir}/lsroll
@@ -200,8 +203,10 @@ rm -rf %{buildroot}
 %dir %{_localstatedir}/lib/%{name}/KEY-SAFE
 %dir /var/log/%{name}
 %{_mandir}/man1/blinkenlights.1*
+%{_mandir}/man1/bubbles.1*
 %{_mandir}/man1/cleanarch.1*
 %{_mandir}/man1/cleankrf.1*
+%{_mandir}/man1/convertar.1*
 %{_mandir}/man1/dnspktflow.1*
 %{_mandir}/man1/dnssec-tools.1.*
 %{_mandir}/man1/donuts.1*
@@ -225,6 +230,7 @@ rm -rf %{buildroot}
 %{_mandir}/man1/keyarch.1*
 %{_mandir}/man1/krfcheck.1*
 %{_mandir}/man1/libval_check_conf.1.*
+%{_mandir}/man1/lights.1*
 %{_mandir}/man1/lsdnssec.1*
 %{_mandir}/man1/lskrf.1*
 %{_mandir}/man1/lsroll.1*
@@ -254,6 +260,7 @@ rm -rf %{buildroot}
 %{perl_vendorarch}/auto/Net/addrinfo/
 %{perl_vendorarch}/Net/DNS/ZoneFile/
 %{perl_vendorlib}/Net/DNS/SEC/Tools/Donuts/
+%{perl_vendorlib}/Net/DNS/SEC/Tools/TrustAnchor*
 %{_mandir}/man3/Net::addrinfo.3pm*
 %{_mandir}/man3/Net::DNS::SEC::Tools::BootStrap.3pm*
 %{_mandir}/man3/Net::DNS::SEC::Tools::conf.3pm*
@@ -265,6 +272,7 @@ rm -rf %{buildroot}
 %{_mandir}/man3/Net::DNS::SEC::Tools::rolllog.3pm.*
 %{_mandir}/man3/Net::DNS::SEC::Tools::rollmgr.3pm*
 %{_mandir}/man3/Net::DNS::SEC::Tools::rollrec.3pm*
+%{_mandir}/man3/Net::DNS::SEC::Tools::TrustAnchor*.3pm*
 %{_mandir}/man3/Net::DNS::SEC::Tools::timetrans.3pm*
 %{_mandir}/man3/Net::DNS::SEC::Tools::tooloptions.3pm*
 %{_mandir}/man3/Net::DNS::SEC::Validator.3pm*
@@ -294,8 +302,8 @@ rm -rf %{buildroot}
 %{_mandir}/man3/root_hints_get.3*
 %{_mandir}/man3/root_hints_set.3*
 %{_mandir}/man3/val_add_valpolicy.3*
+%{_mandir}/man3/val_context_setqflags.3*
 %{_mandir}/man3/val_create_context.3*
-%{_mandir}/man3/val_create_context_with_conf.3*
 %{_mandir}/man3/val_does_not_exist.3*
 %{_mandir}/man3/val_freeaddrinfo.3*
 %{_mandir}/man3/val_free_answer_chain.3.*
