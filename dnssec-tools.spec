@@ -1,4 +1,4 @@
-%define major 5
+%define	major	12
 %define libname %mklibname dnssec-tools %{major}
 %define develname %mklibname dnssec-tools -d
 
