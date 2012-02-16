@@ -4,8 +4,8 @@
 
 Summary:	A suite of tools for managing dnssec aware DNS usage
 Name:		dnssec-tools
-Version:	1.10
-Release:	2
+Version:	1.12.1
+Release:	1
 License:	BSD-like
 Group:		Networking/Other
 URL:		http://www.dnssec-tools.org/
@@ -14,7 +14,6 @@ Source1:	dnssec-tools-dnsval.conf
 Patch0:		dnssec-tools-linux-conf-paths-1.2.patch
 Patch2:		dnssec-tools-DESTDIR.diff
 Patch3:		dnssec-tools-linkage_fix.diff
-Patch4:		dnssec-tools-1.5-format_not_a_string_literal_and_no_format_arguments.diff
 Requires:	bind
 Requires:	perl-Net-DNS
 Requires:	perl-%{name} >= %{version}
@@ -66,10 +65,9 @@ C-based libraries useful for developing dnssec aware tools.
 %prep
 
 %setup -q
-%patch0 -p0
+#patch0 -p0
 %patch2 -p0
 %patch3 -p0
-%patch4 -p0
 
 # clean up CVS stuff
 for i in `find . -type d -name CVS` `find . -type f -name .cvs\*` `find . -type f -name .#\*`; do
