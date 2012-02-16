@@ -26,7 +26,6 @@ BuildRequires:	perl-devel
 BuildRequires:	openssl-devel
 BuildRequires:	autoconf2.5
 BuildRequires:	libtool
-BuildRequires:	chrpath
 BuildRequires:	bind
 
 %description
@@ -107,9 +106,6 @@ install -m0644 tools/etc/%{name}/blinkenlights.conf %{buildroot}%{_sysconfdir}/%
 
 # not needed and installed in two places
 rm -f %{buildroot}%{perl_vendorlib}/TrustMan.pl
-
-# nuke one rpath
-chrpath -d %{buildroot}%{perl_vendorarch}/auto/Net/DNS/SEC/Validator/Validator.so
 
 # install log rotation stuff
 cat > %{buildroot}%{_sysconfdir}/logrotate.d/%{name} << EOF
