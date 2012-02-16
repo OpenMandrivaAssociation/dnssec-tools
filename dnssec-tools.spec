@@ -54,9 +54,8 @@ C-based libraries useful for developing dnssec aware tools.
 %package -n	%{devname}
 Summary:	C-based development libraries for dnssec aware tools
 Group:		Development/C
-Requires:	%{libname} = %{version}-%{release}
-Provides:	%{name}-devel
-Provides:	lib%{name}-devel
+Requires:	%{libname} = %{EVRD}
+Provides:	%{name}-devel = %{EVRD}
 Obsoletes:	%{mklibname dnssec-tools -d 4}
 
 %description -n	%{devname}
