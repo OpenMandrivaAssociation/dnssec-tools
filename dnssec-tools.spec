@@ -1,6 +1,6 @@
 %define	major	12
-%define libname %mklibname dnssec-tools %{major}
-%define develname %mklibname dnssec-tools -d
+%define	libname %mklibname dnssec-tools %{major}
+%define	devname	%mklibname dnssec-tools -d
 
 Summary:	A suite of tools for managing dnssec aware DNS usage
 Name:		dnssec-tools
@@ -28,7 +28,6 @@ BuildRequires:	autoconf2.5
 BuildRequires:	libtool
 BuildRequires:	chrpath
 BuildRequires:	bind
-BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-buildroot
 
 %description
 The goal of the DNSSEC-Tools project is to create a set of tools, patches,
@@ -52,7 +51,7 @@ Requires:	openssl
 %description -n	%{libname}
 C-based libraries useful for developing dnssec aware tools.
 
-%package -n	%{develname}
+%package -n	%{devname}
 Summary:	C-based development libraries for dnssec aware tools
 Group:		Development/C
 Requires:	%{libname} = %{version}-%{release}
@@ -60,7 +59,7 @@ Provides:	%{name}-devel
 Provides:	lib%{name}-devel
 Obsoletes:	%{mklibname dnssec-tools -d 4}
 
-%description -n	%{develname}
+%description -n	%{devname}
 C-based libraries useful for developing dnssec aware tools.
 
 %prep
@@ -77,11 +76,6 @@ autoreconf -fi
 pushd validator
 autoreconf -fi
 popd
-
-# clean up CVS stuff
-for i in `find . -type d -name CVS` `find . -type f -name .cvs\*` `find . -type f -name .#\*`; do
-    if [ -e "$i" ]; then rm -r $i; fi >&/dev/null
-done
 
 %build
 export PATH=$PATH:%{_sbindir}
@@ -103,8 +97,6 @@ sed -i 's|^runpath_var=LD_RUN_PATH|runpath_var=DIE_RPATH_DIE|g' validator/libtoo
 make
 
 %install
-rm -rf %{buildroot}
-
 %makeinstall_std
 
 install -d %{buildroot}%{_sysconfdir}/logrotate.d
@@ -131,19 +123,7 @@ cat > %{buildroot}%{_sysconfdir}/logrotate.d/%{name} << EOF
 }
 EOF
 
-%if %mdkversion < 200900
-%post -n %{libname} -p /sbin/ldconfig
-%endif
-
-%if %mdkversion < 200900
-%postun -n %{libname} -p /sbin/ldconfig
-%endif
-
-%clean
-rm -rf %{buildroot}
-
 %files
-%defattr(-,root,root,-)
 %doc COPYING ChangeLog INSTALL NEWS README tools/demos tools/linux/ifup-dyn-dns tools/logwatch
 %attr(0644,root,root) %config(noreplace) %{_sysconfdir}/%{name}/%{name}.conf
 %attr(0644,root,root) %config(noreplace) %{_sysconfdir}/%{name}/dnsval.conf
@@ -255,7 +235,6 @@ rm -rf %{buildroot}
 %{_mandir}/man3/p_val_status.3*
 
 %files -n perl-%{name}
-%defattr(-,root,root)
 %{perl_vendorarch}/Net/addrinfo*
 %{perl_vendorarch}/Net/DNS/SEC/*
 %{perl_vendorarch}/auto/Net/DNS/SEC/Validator
@@ -281,10 +260,9 @@ rm -rf %{buildroot}
 %{_mandir}/man3/Net::DNS::ZoneFile::Fast.3pm*
 
 %files -n %{libname}
-%defattr(-,root,root)
 %{_libdir}/*.so.%{major}*
 
-%files -n %{develname}
+%files -n %{devname}
 %defattr(-,root,root)
 %doc apps/*
 %{_bindir}/libval-config
