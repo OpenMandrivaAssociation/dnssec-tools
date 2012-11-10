@@ -1,0 +1,12 @@
+diff -p -up validator/libval/Makefile.in.linkage_fix validator/libval/Makefile.in
+--- validator/libval/Makefile.in.linkage_fix	2011-08-01 16:17:04.758626348 -0300
++++ validator/libval/Makefile.in	2011-08-01 16:19:23.572629600 -0300
+@@ -60,7 +60,7 @@ clean:
+ 	$(RM) -rf $(LT_DIR)
+ 
+ $(LIBVAL): $(LOBJ)
+-	$(LIBTOOLLD) -o $@ $(LOBJ)
++	$(LIBTOOLLD) -o $@ $(LOBJ) $(LIBS) ../libsres/libsres.la
+ 
+ install:
+ 	$(MKPATH) $(DESTDIR)/$(libdir)

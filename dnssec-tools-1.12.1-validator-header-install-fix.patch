@@ -1,0 +1,13 @@
+--- dnssec-tools-1.12.1/validator/Makefile.in~	2012-02-16 17:07:08.126591615 +0100
++++ dnssec-tools-1.12.1/validator/Makefile.in	2012-02-16 17:07:09.890593745 +0100
+@@ -92,8 +92,8 @@ subdirinstall:
+ 
+ localinstall:
+ 	$(INSTALL) libval-config $(DESTDIR)$(bindir)
+-	$(INSTALL) include/validator/validator-config.h $(DESTDIR)$(includedir)
+-	$(INSTALL) include/validator/validator-compat.h $(DESTDIR)$(includedir)
++	$(INSTALL) -m644 include/validator/validator-config.h -D $(DESTDIR)$(includedir)/validator-config.h
++	$(INSTALL) -m644 include/validator/validator-compat.h -D $(DESTDIR)$(includedir)/validator-compat.h
+ 
+ subdirclean:
+ 	@for i in $(SUBDIRS) ; do \
