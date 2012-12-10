@@ -262,7 +262,6 @@ EOF
 %{_includedir}/validator/*.h
 %{_libdir}/*.a
 %{_libdir}/*.so
-%{_libdir}/*.la
 %{_mandir}/man3/dnsval.conf.3*
 %{_mandir}/man3/dnsval_conf_get.3*
 %{_mandir}/man3/dnsval_conf_set.3*
@@ -297,3 +296,74 @@ EOF
 %{_mandir}/man3/val_res_query.3*
 %{_mandir}/man3/val_res_search.3*
 
+
+
+%changelog
+* Thu Feb 16 2012 Per Øyvind Karlsen <peroyvind@mandriva.org> 1.12.1-1
++ Revision: 775291
+- fix install-file-in-docs
+- drop no longer necessary chrpath usage for deletion of rpath, perl has now been
+  fixed to no longer add rpath to extensions built
+- clean dependencies
+- do parallel build
+- cleanout spec
+- fix version-control-internal-file
+- get rid of backup files that gets installed
+- bump major to 12
+- fix installation of validator headers (P4)
+- use autoreconf, do it in %%prep rather than %%build
+- new version
+- add %%{_sbindir} to $PATH in order to pick up dnssec-keygen
+- add bind to buildrequries
+- mass rebuild of perl extensions against perl 5.14.2
+
+* Wed Jul 21 2010 Jérôme Quelin <jquelin@mandriva.org> 1.5-4mdv2011.0
++ Revision: 556350
+- rebuild for perl 5.12
+
+* Thu Apr 15 2010 Funda Wang <fwang@mandriva.org> 1.5-3mdv2010.1
++ Revision: 535070
+- rebuild
+
+* Sun Oct 04 2009 Oden Eriksson <oeriksson@mandriva.com> 1.5-2mdv2010.0
++ Revision: 453458
+- rebuild
+
+* Sat Mar 07 2009 Oden Eriksson <oeriksson@mandriva.com> 1.5-1mdv2009.1
++ Revision: 351685
+- 1.5
+- fix build with -Werror=format-security
+
+* Sat Sep 20 2008 Oden Eriksson <oeriksson@mandriva.com> 1.4.1-1mdv2009.0
++ Revision: 286118
+- 1.4.1
+- rediffed P2
+- drop upstream implemented patches
+- fix linkage (P3)
+- fix devel package naming
+
+  + Thierry Vignaud <tv@mandriva.org>
+    - rebuild
+
+  + Pixel <pixel@mandriva.com>
+    - do not call ldconfig in %%post/%%postun, it is now handled by filetriggers
+    - adapt to %%_localstatedir now being /var instead of /var/lib (#22312)
+
+* Mon Jan 14 2008 Pixel <pixel@mandriva.com> 1.2-2mdv2008.1
++ Revision: 151398
+- rebuild for perl-5.10.0
+
+  + Olivier Blin <blino@mandriva.org>
+    - restore BuildRoot
+
+  + Thierry Vignaud <tv@mandriva.org>
+    - kill re-definition of %%buildroot on Pixel's request
+
+* Wed May 23 2007 Oden Eriksson <oeriksson@mandriva.com> 1.2-1mdv2008.0
++ Revision: 30047
+- Import dnssec-tools
+
+
+
+* Wed May 23 2007 Oden Eriksson <oeriksson@mandriva.com> 1.2-1mdv2007.1
+- initial Mandriva package
