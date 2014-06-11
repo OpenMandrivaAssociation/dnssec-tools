@@ -1,19 +1,23 @@
-%define	major	12
+%define	major	14
 %define	libname %mklibname dnssec-tools %{major}
 %define	devname	%mklibname dnssec-tools -d
 
 Summary:	A suite of tools for managing dnssec aware DNS usage
+
+
+
 Name:		dnssec-tools
-Version:	1.12.1
+Version:	2.0
 Release:	1
 License:	BSD-like
 Group:		Networking/Other
 URL:		http://www.dnssec-tools.org/
 Source0:	http://www.dnssec-tools.org/download/dnssec-tools-%{version}.tar.gz
 Source1:	dnssec-tools-dnsval.conf
-Patch2:		dnssec-tools-DESTDIR.diff
-Patch3:		dnssec-tools-linkage_fix.diff
-Patch4:		dnssec-tools-1.12.1-validator-header-install-fix.patch
+Source2:	libval-config
+Patch1:		dnssec-tools-linux-conf-paths-1.13.patch
+Patch2:		dnssec-tools-zonefile-fast-nsec3-1.20.patch
+Patch3:		dnssec-tools-zonefile-fast-misc.patch
 Requires:	bind
 Requires:	perl-Net-DNS
 Requires:	perl-%{name} >= %{version}
@@ -34,6 +38,9 @@ deployment of DNSSEC-related technologies.
 
 %package -n	perl-%{name}
 Summary:	Perl modules supporting DNSSEC (needed by the dnssec-tools)
+
+
+
 Group:		Development/Perl
 
 %description -n	perl-%{name}
@@ -43,6 +50,9 @@ developers.
 
 %package -n	%{libname}
 Summary:	C-based libraries for dnssec aware tools
+
+
+
 Group:		System/Libraries
 Requires:	openssl
 
@@ -51,6 +61,9 @@ C-based libraries useful for developing dnssec aware tools.
 
 %package -n	%{devname}
 Summary:	C-based development libraries for dnssec aware tools
+
+
+
 Group:		Development/C
 Requires:	%{libname} = %{EVRD}
 Provides:	%{name}-devel = %{EVRD}
@@ -61,9 +74,9 @@ C-based libraries useful for developing dnssec aware tools.
 
 %prep
 %setup -q
-%patch2 -p0
-%patch3 -p0
-%patch4 -p1 -b .install~
+%patch1 -p0
+%patch2 -p2
+%patch3 -p2
 
 find -name \*.orig -o -name .gitignore|xargs rm -f
 
@@ -73,16 +86,17 @@ autoreconf -fi
 popd
 
 %build
-export PATH=$PATH:%{_sbindir}
-
 %configure2_5x \
-    --with-validator-testcases-file=%{_datadir}/%{name}/validator-testcases \
-    --with-perl-build-args="INSTALLDIRS=vendor" \
-    --with-root-hints=%{_localstatedir}/lib/named/var/named/named.ca \
-    --with-resolv-conf=%{_sysconfdir}/resolv.conf \
-    --with-nsec3 \
-    --with-dlv \
-    --with-ipv6
+        --with-validator-testcases-file=%{_datadir}/dnssec-tools/validator-testcases \
+        --with-perl-build-args="INSTALLDIRS=vendor OPTIMIZE='%{optflags}'" \
+        --sysconfdir=/etc \
+        --with-root-hints=/etc/dnssec-tools/root.hints \
+        --with-resolv-conf=/etc/dnssec-tools/resolv.conf \
+        --disable-static \
+        --with-nsec3 \
+        --with-ipv6 \
+        --with-dlv \
+	--disable-bind-checks
 
 sed -i 's|^hardcode_libdir_flag_spec=.*|hardcode_libdir_flag_spec=""|g' libtool
 sed -i 's|^runpath_var=LD_RUN_PATH|runpath_var=DIE_RPATH_DIE|g' libtool
@@ -115,6 +129,12 @@ cat > %{buildroot}%{_sysconfdir}/logrotate.d/%{name} << EOF
 }
 EOF
 
+# Move the architecture dependent config file to its own place
+# (this allows multiple architecture rpms to be installed at the same time)
+mv %{buildroot}/%{_bindir}/libval-config %{buildroot}/%{_bindir}/libval-config-%{_arch}
+# Add a new wrapper script that calls the right file at run time
+install -m 755 %{SOURCE2} %{buildroot}/%{_bindir}/libval-config
+
 %files
 %doc COPYING ChangeLog NEWS README tools/demos tools/linux/ifup-dyn-dns tools/logwatch
 %attr(0644,root,root) %config(noreplace) %{_sysconfdir}/%{name}/%{name}.conf
@@ -123,6 +143,8 @@ EOF
 %attr(0644,root,root) %config(noreplace) %{_sysconfdir}/logrotate.d/%{name}
 %{_bindir}/blinkenlights
 %{_bindir}/bubbles
+%{_bindir}/buildrealms
+%{_bindir}/check-zone-expiration
 %{_bindir}/cleanarch
 %{_bindir}/cleankrf
 %{_bindir}/convertar
@@ -130,30 +152,39 @@ EOF
 %{_bindir}/donuts
 %{_bindir}/donutsd
 %{_bindir}/drawvalmap
+%{_bindir}/dt-danechk
+%{_bindir}/dt-getaddr
+%{_bindir}/dt-gethost
+%{_bindir}/dt-getname
+%{_bindir}/dt-getquery
+%{_bindir}/dt-getrrset
 %{_bindir}/dtck
 %{_bindir}/dtconf
 %{_bindir}/dtconfchk
 %{_bindir}/dtdefs
 %{_bindir}/dtinitconf
+%{_bindir}/dtrealms
 %{_bindir}/expchk
 %{_bindir}/fixkrf
 %{_bindir}/genkrf
-%{_bindir}/getaddr
 %{_bindir}/getdnskeys
 %{_bindir}/getds
-%{_bindir}/gethost
-%{_bindir}/getname
-%{_bindir}/getquery
-%{_bindir}/getrrset
+%{_bindir}/grandvizier
 %{_bindir}/keyarch
+%{_bindir}/keymod
 %{_bindir}/krfcheck
 %{_bindir}/libval_check_conf
 %{_bindir}/lights
 %{_bindir}/lsdnssec
 %{_bindir}/lskrf
+%{_bindir}/lsrealm
 %{_bindir}/lsroll
 %{_bindir}/maketestzone
 %{_bindir}/mapper
+%{_bindir}/realmchk
+%{_bindir}/realmctl
+%{_bindir}/realminit
+%{_bindir}/realmset
 %{_bindir}/rollchk
 %{_bindir}/rollctl
 %{_bindir}/rollerd
@@ -165,7 +196,7 @@ EOF
 %{_bindir}/tachk
 %{_bindir}/timetrans
 %{_bindir}/trustman
-%{_bindir}/validate
+%{_bindir}/dt-validate
 %{_bindir}/zonesigner
 
 %dir %{_datadir}/%{name}
@@ -176,53 +207,7 @@ EOF
 %dir %{_localstatedir}/lib/%{name}
 %dir %{_localstatedir}/lib/%{name}/KEY-SAFE
 %dir /var/log/%{name}
-%{_mandir}/man1/blinkenlights.1*
-%{_mandir}/man1/bubbles.1*
-%{_mandir}/man1/cleanarch.1*
-%{_mandir}/man1/cleankrf.1*
-%{_mandir}/man1/convertar.1*
-%{_mandir}/man1/dnspktflow.1*
-%{_mandir}/man1/dnssec-tools.1.*
-%{_mandir}/man1/donuts.1*
-%{_mandir}/man1/donutsd.1*
-%{_mandir}/man1/drawvalmap.1*
-%{_mandir}/man1/dtck.1.*
-%{_mandir}/man1/dtconf.1.*
-%{_mandir}/man1/dtconfchk.1*
-%{_mandir}/man1/dtdefs.1*
-%{_mandir}/man1/dtinitconf.1*
-%{_mandir}/man1/expchk.1*
-%{_mandir}/man1/fixkrf.1*
-%{_mandir}/man1/genkrf.1*
-%{_mandir}/man1/getaddr.1*
-%{_mandir}/man1/getdnskeys.1*
-%{_mandir}/man1/getds.1*
-%{_mandir}/man1/gethost.1*
-%{_mandir}/man1/getname.1.*
-%{_mandir}/man1/getquery.1.*
-%{_mandir}/man1/getrrset.1.*
-%{_mandir}/man1/keyarch.1*
-%{_mandir}/man1/krfcheck.1*
-%{_mandir}/man1/libval_check_conf.1.*
-%{_mandir}/man1/lights.1*
-%{_mandir}/man1/lsdnssec.1*
-%{_mandir}/man1/lskrf.1*
-%{_mandir}/man1/lsroll.1*
-%{_mandir}/man1/maketestzone.1*
-%{_mandir}/man1/mapper.1*
-%{_mandir}/man1/rollchk.1*
-%{_mandir}/man1/rollctl.1*
-%{_mandir}/man1/rollerd.1*
-%{_mandir}/man1/rollinit.1*
-%{_mandir}/man1/rolllog.1*
-%{_mandir}/man1/rollrec-editor.1.*
-%{_mandir}/man1/rollset.1*
-%{_mandir}/man1/signset-editor.1*
-%{_mandir}/man1/tachk.1*
-%{_mandir}/man1/timetrans.1*
-%{_mandir}/man1/trustman.1*
-%{_mandir}/man1/validate.1*
-%{_mandir}/man1/zonesigner.1*
+%{_mandir}/man1/*
 %{_mandir}/man3/p_ac_status.3*
 %{_mandir}/man3/p_val_status.3*
 
@@ -234,33 +219,16 @@ EOF
 %{perl_vendorarch}/Net/DNS/ZoneFile/
 %{perl_vendorlib}/Net/DNS/SEC/Tools/Donuts/
 %{perl_vendorlib}/Net/DNS/SEC/Tools/TrustAnchor*
-%{_mandir}/man3/Net::addrinfo.3pm*
-%{_mandir}/man3/Net::DNS::SEC::Tools::BootStrap.3pm*
-%{_mandir}/man3/Net::DNS::SEC::Tools::conf.3pm*
-%{_mandir}/man3/Net::DNS::SEC::Tools::defaults.3pm*
-%{_mandir}/man3/Net::DNS::SEC::Tools::dnssectools.3pm*
-%{_mandir}/man3/Net::DNS::SEC::Tools::Donuts::Rule.3pm*
-%{_mandir}/man3/Net::DNS::SEC::Tools::keyrec.3pm*
-%{_mandir}/man3/Net::DNS::SEC::Tools::QWPrimitives.3pm*
-%{_mandir}/man3/Net::DNS::SEC::Tools::rolllog.3pm.*
-%{_mandir}/man3/Net::DNS::SEC::Tools::rollmgr.3pm*
-%{_mandir}/man3/Net::DNS::SEC::Tools::rollrec.3pm*
-%{_mandir}/man3/Net::DNS::SEC::Tools::TrustAnchor*.3pm*
-%{_mandir}/man3/Net::DNS::SEC::Tools::timetrans.3pm*
-%{_mandir}/man3/Net::DNS::SEC::Tools::tooloptions.3pm*
-%{_mandir}/man3/Net::DNS::SEC::Validator.3pm*
-%{_mandir}/man3/Net::DNS::ZoneFile::Fast.3pm*
+%{_mandir}/man3/Net::*
 
 %files -n %{libname}
 %{_libdir}/*.so.%{major}*
 
 %files -n %{devname}
-%defattr(-,root,root)
 %doc apps/*
-%{_bindir}/libval-config
+%{_bindir}/libval-config*
 %dir %{_includedir}/validator
 %{_includedir}/validator/*.h
-%{_libdir}/*.a
 %{_libdir}/*.so
 %{_mandir}/man3/dnsval.conf.3*
 %{_mandir}/man3/dnsval_conf_get.3*
@@ -272,98 +240,5 @@ EOF
 %{_mandir}/man3/resolv_conf_set.3*
 %{_mandir}/man3/root_hints_get.3*
 %{_mandir}/man3/root_hints_set.3*
-%{_mandir}/man3/val_add_valpolicy.3*
-%{_mandir}/man3/val_context_setqflags.3*
-%{_mandir}/man3/val_create_context.3*
-%{_mandir}/man3/val_does_not_exist.3*
-%{_mandir}/man3/val_freeaddrinfo.3*
-%{_mandir}/man3/val_free_answer_chain.3.*
-%{_mandir}/man3/val_free_context.3*
-%{_mandir}/man3/val_free_response.3*
-%{_mandir}/man3/val_free_result_chain.3*
-%{_mandir}/man3/val_getaddrinfo.3*
-%{_mandir}/man3/val_gethostbyaddr.3*
-%{_mandir}/man3/val_gethostbyaddr_r.3*
-%{_mandir}/man3/val_gethostbyname2.3*
-%{_mandir}/man3/val_gethostbyname2_r.3*
-%{_mandir}/man3/val_gethostbyname.3*
-%{_mandir}/man3/val_gethostbyname_r.3*
-%{_mandir}/man3/val_getnameinfo.3*
-%{_mandir}/man3/val_get_rrset.3.*
-%{_mandir}/man3/val_istrusted.3*
-%{_mandir}/man3/val_isvalidated.3*
-%{_mandir}/man3/val_resolve_and_check.3*
-%{_mandir}/man3/val_res_query.3*
-%{_mandir}/man3/val_res_search.3*
+%{_mandir}/man3/val_*
 
-
-
-%changelog
-* Thu Feb 16 2012 Per Øyvind Karlsen <peroyvind@mandriva.org> 1.12.1-1
-+ Revision: 775291
-- fix install-file-in-docs
-- drop no longer necessary chrpath usage for deletion of rpath, perl has now been
-  fixed to no longer add rpath to extensions built
-- clean dependencies
-- do parallel build
-- cleanout spec
-- fix version-control-internal-file
-- get rid of backup files that gets installed
-- bump major to 12
-- fix installation of validator headers (P4)
-- use autoreconf, do it in %%prep rather than %%build
-- new version
-- add %%{_sbindir} to $PATH in order to pick up dnssec-keygen
-- add bind to buildrequries
-- mass rebuild of perl extensions against perl 5.14.2
-
-* Wed Jul 21 2010 Jérôme Quelin <jquelin@mandriva.org> 1.5-4mdv2011.0
-+ Revision: 556350
-- rebuild for perl 5.12
-
-* Thu Apr 15 2010 Funda Wang <fwang@mandriva.org> 1.5-3mdv2010.1
-+ Revision: 535070
-- rebuild
-
-* Sun Oct 04 2009 Oden Eriksson <oeriksson@mandriva.com> 1.5-2mdv2010.0
-+ Revision: 453458
-- rebuild
-
-* Sat Mar 07 2009 Oden Eriksson <oeriksson@mandriva.com> 1.5-1mdv2009.1
-+ Revision: 351685
-- 1.5
-- fix build with -Werror=format-security
-
-* Sat Sep 20 2008 Oden Eriksson <oeriksson@mandriva.com> 1.4.1-1mdv2009.0
-+ Revision: 286118
-- 1.4.1
-- rediffed P2
-- drop upstream implemented patches
-- fix linkage (P3)
-- fix devel package naming
-
-  + Thierry Vignaud <tv@mandriva.org>
-    - rebuild
-
-  + Pixel <pixel@mandriva.com>
-    - do not call ldconfig in %%post/%%postun, it is now handled by filetriggers
-    - adapt to %%_localstatedir now being /var instead of /var/lib (#22312)
-
-* Mon Jan 14 2008 Pixel <pixel@mandriva.com> 1.2-2mdv2008.1
-+ Revision: 151398
-- rebuild for perl-5.10.0
-
-  + Olivier Blin <blino@mandriva.org>
-    - restore BuildRoot
-
-  + Thierry Vignaud <tv@mandriva.org>
-    - kill re-definition of %%buildroot on Pixel's request
-
-* Wed May 23 2007 Oden Eriksson <oeriksson@mandriva.com> 1.2-1mdv2008.0
-+ Revision: 30047
-- Import dnssec-tools
-
-
-
-* Wed May 23 2007 Oden Eriksson <oeriksson@mandriva.com> 1.2-1mdv2007.1
-- initial Mandriva package

@@ -1,2 +1,4 @@
+removed_sources:
+  dnssec-tools-1.12.1.tar.gz: 66f5fd921372fafc6e9124d2d6438050525408a0
 sources:
-  "dnssec-tools-1.12.1.tar.gz": 66f5fd921372fafc6e9124d2d6438050525408a0
+  dnssec-tools-2.0.tar.gz: 4cae015ba8fe6aba66131cd9f0ae0c8dd4524f01
