@@ -8,7 +8,7 @@ Summary:	A suite of tools for managing dnssec aware DNS usage
 
 Name:		dnssec-tools
 Version:	2.0
-Release:	1
+Release:	2
 License:	BSD-like
 Group:		Networking/Other
 URL:		http://www.dnssec-tools.org/
