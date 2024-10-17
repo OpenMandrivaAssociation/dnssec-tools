@@ -11,7 +11,7 @@ Version:	2.0
 Release:	2
 License:	BSD-like
 Group:		Networking/Other
-URL:		http://www.dnssec-tools.org/
+URL:		https://www.dnssec-tools.org/
 Source0:	http://www.dnssec-tools.org/download/dnssec-tools-%{version}.tar.gz
 Source1:	dnssec-tools-dnsval.conf
 Source2:	libval-config
