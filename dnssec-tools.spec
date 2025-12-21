@@ -25,6 +25,10 @@ Requires:	perl(Tk)
 Requires:	perl(Tk::Dialog)
 Requires:	perl(Tk::Pane)
 Requires:	perl(Tk::Table)
+BuildRequires:	automake
+BuildRequires:	libtool-base
+BuildRequires:	slibtool
+BuildRequires:	make
 BuildRequires:	perl-devel
 BuildRequires:	openssl-devel
 BuildRequires:	autoconf2.5
